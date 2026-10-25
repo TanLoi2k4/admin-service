@@ -1,0 +1,97 @@
+server:
+  port: 8086
+
+spring:
+  application:
+    name: admin-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/admin_db
+    username: postgres
+    password: loi114
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      connection-timeout: 30000
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:4321/realms/ecommerce-realm
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 60000
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    enabled: true
+    fetch-registry: true
+    register-with-eureka: true
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}
+    ip-address: ${spring.cloud.client.ip-address}
+
+cloudinary:
+  cloud_name: dtvyf6doe
+  api_key: 267982487387328
+  api_secret: Lwg2biD9-NbrJ48JQO8ZRKaoN8M
+  folder: admin
+
+keycloak:
+  realm: ecommerce-realm
+  auth-server-url: http://localhost:4321
+  resource: admin-service
+  credentials:
+    secret: 3jbiJQqdxe0wiurb8QAEbwSDy1qBDo35
+
+logging:
+  level:
+    root: INFO
+    org.springframework.security: DEBUG
+    org.springframework.cloud: DEBUG
+    com.netflix.discovery: DEBUG
+    com.tlcn.admin_service: DEBUG
+    org.keycloak: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+email:
+  username: loideptrai114@gmail.com
+  password: lkeecgsdndxgajnp
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+    shutdown:
+      enabled: false
+    gateway:
+      enabled: false
+
+admin-service:
+  internal-log-token: ${ADMIN_SERVICE_INTERNAL_LOG_TOKEN:dev-internal-token}
